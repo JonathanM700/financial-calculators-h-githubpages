@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kenya Treasury Bills Pricing Calculator</title>
+  <meta name="description" content="Calculate Kenya Treasury Bills pricing with tax, fees, and net earnings for 91, 182, and 364 day bills. Simple, mobile-friendly, and ideal for investors." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Treasury Bills Investment Tool</p>
+        <h1>Kenya Treasury Bills Pricing</h1>
+        <p class="intro">Estimate payment price, tax, fees, and net earnings for Treasury Bills using a clean calculator interface designed for fast decisions.</p>
+      </div>
+        <legend>General Information</legend>
+
+        <label class="field-label" for="faceValue">
+          Face Value (KES)
+          <button type="button" class="info-button" data-info="faceValue">?</button>
+        </label>
+        <input id="faceValue" name="faceValue" type="number" min="50000" step="1" placeholder="50000" required />
+        <p class="hint">Enter the total value of the bill in multiples of 1 KES, minimum 50,000.</p>
+
+        <div class="radio-group">
+          <span class="field-label">Include Tax?</span>
+          <button type="button" class="info-button" data-info="taxOption">?</button>
+          <label><input type="radio" name="taxEnabled" value="yes" checked /> Yes</label>
+          <label><input type="radio" name="taxEnabled" value="no" /> No</label>
+        </div>
+
+        <div id="taxRateRow" class="tax-row">
+          <span class="tax-text">Tax rate: <strong id="taxRateDisplay">15.00%</strong></span>
+          <button type="button" id="editTaxButton" class="secondary">Edit</button>
+        </div>
+
+        <div id="taxRateEdit" class="hidden">
+          <label class="field-label" for="taxRate">Tax rate (%)</label>
+          <input id="taxRate" type="number" min="0" max="100" step="0.01" value="15.00" />
+          <button type="button" id="saveTaxButton" class="secondary">Save</button>
+        </div>
+
+        <label class="field-label" for="interestRate">
+          Bill Rate (%)
+          <button type="button" class="info-button" data-info="interestRate">?</button>
+        </label>
+        <input id="interestRate" name="interestRate" type="number" min="0" step="0.0001" placeholder="e.g. 12.7500" required />
+        <p class="hint">Use the CBK published bill rate with four decimal places.</p>
+
+        <label class="field-label" for="days">
+          Tenor (Days)
+          <button type="button" class="info-button" data-info="days">?</button>
+        </label>
+        <select id="days" name="days">
+          <option value="91">91 Days</option>
+          <option value="182">182 Days</option>
+          <option value="364">364 Days</option>
+        </select>
+      </fieldset>
+
+      <fieldset>
+        <legend>Other Expenses</legend>
+        <p class="hint">Add transaction fees, RTGS charges, or any extra payment cost affecting your final cash outflow.</p>
+        <div id="expensesList"></div>
+        <button type="button" id="addExpenseButton" class="button-add">Add another expense</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Result Summary</legend>
+
+        <div class="output-row">
+          <label class="field-label">Price (KES)</label>
+          <button type="button" class="info-button" data-info="price">?</button>
+          <output id="price" class="output-field">0.00</output>
+        </div>
+
+        <div class="output-row">
+          <label class="field-label">Tax Amount (KES)</label>
+          <button type="button" class="info-button" data-info="taxAmount">?</button>
+          <output id="taxAmount" class="output-field">0.00</output>
+        </div>
+
+        <div class="output-row">
+          <label class="field-label">Total Offer Payment (KES)</label>
+          <button type="button" class="info-button" data-info="totalPayment">?</button>
+          <output id="totalPayment" class="output-field">0.00</output>
+        </div>
+
+        <div class="output-row">
+          <label class="field-label">Total Expenditure (KES)</label>
+          <button type="button" class="info-button" data-info="totalExpenditure">?</button>
+          <output id="totalExpenditure" class="output-field">0.00</output>
+        </div>
+
+        <div class="output-row">
+          <label class="field-label">Interest Amount (KES)</label>
+          <button type="button" class="info-button" data-info="netInterest">?</button>
+          <output id="netInterest" class="output-field">0.00</output>
+        </div>
+
+        <div class="output-row">
+          <label class="field-label">Earning Before Charges (KES, %, Annualized %)</label>
+          <button type="button" class="info-button" data-info="earningBefore">?</button>
+          <output id="earningBefore" class="output-field">0.00</output>
+        </div>
+
+        <div class="output-row">
+          <label class="field-label">Earning After Charges (KES, %, Annualized %)</label>
+          <button type="button" class="info-button" data-info="earningAfter">?</button>
+          <output id="earningAfter" class="output-field">0.00</output>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button type="button" id="computeButton" class="primary">Compute</button>
+        <button type="button" id="resetButton" class="secondary">Reset</button>
+      </div>
+    </form>
+
+    <div id="popover" class="popover hidden"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
