@@ -1,0 +1,16 @@
+{
+  "name": "Kenya Treasury Bills Pricing Calculator",
+  "short_name": "T-Bills KE",
+  "description": "Price Kenya Treasury Bills using the CBK yield formula, tax, and extra fees.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#0f4c81",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

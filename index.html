@@ -2,126 +2,281 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Kenya Treasury Bills Pricing Calculator</title>
-  <meta name="description" content="Calculate Kenya Treasury Bills pricing with tax, fees, and net earnings for 91, 182, and 364 day bills. Simple, mobile-friendly, and ideal for investors." />
+  <meta name="description" content="Calculate Kenya Treasury Bills price, 15% withholding tax, fees, and net yield for 91, 182, and 364 day bills using the CBK formula. Mobile-friendly investor tool." />
+  <meta name="theme-color" content="#0f4c81" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="T-Bills KE" />
+  <meta property="og:title" content="Kenya Treasury Bills Pricing Calculator" />
+  <meta property="og:description" content="Estimate CBK T-bill payment, tax, expenses, and net earnings for 91, 182, and 364 day tenors." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <link rel="manifest" href="site.webmanifest" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <a class="skip-link" href="#tbillForm">Skip to calculator</a>
+
+  <header class="top-bar">
+    <p class="brand">Kenya T-Bills</p>
+    <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme">Dark</button>
+  </header>
+
   <main class="page-shell">
     <section class="hero">
       <div>
         <p class="eyebrow">Treasury Bills Investment Tool</p>
         <h1>Kenya Treasury Bills Pricing</h1>
-        <p class="intro">Estimate payment price, tax, fees, and net earnings for Treasury Bills using a clean calculator interface designed for fast decisions.</p>
+        <p class="intro">Estimate the amount payable to CBK, withholding tax, extra fees, and net earnings using the official yield formula. Built for weekly 91, 182, and 364-day auctions.</p>
       </div>
-        <legend>General Information</legend>
+      <div class="hero-aside">
+        <p class="badge" id="auctionBadge">Loading auction dates…</p>
+        <p class="hint compact">Auctions are typically Thursday. Pay successful bids by 2:00pm on the following Monday (value date), or the next business day if that Monday is a weekend or public holiday.</p>
+        <p class="hint compact">Official results: <a href="https://www.centralbank.go.ke/bills-bonds/treasury-bills/" rel="noopener noreferrer" target="_blank">CBK Treasury Bills</a> · Invest via <a href="https://dhowcsd.centralbank.go.ke/" rel="noopener noreferrer" target="_blank">DhowCSD</a></p>
+      </div>
+    </section>
 
-        <label class="field-label" for="faceValue">
-          Face Value (KES)
-          <button type="button" class="info-button" data-info="faceValue">?</button>
-        </label>
-        <input id="faceValue" name="faceValue" type="number" min="50000" step="1" placeholder="50000" required />
-        <p class="hint">Enter the total value of the bill in multiples of 1 KES, minimum 50,000.</p>
+    <section class="rate-strip" aria-label="Latest published average rates">
+      <div>
+        <p class="strip-label">Last published weighted average rates</p>
+        <p class="hint compact" id="rateAsOf">Use as a starting point. Your allocated rate is the auction result, not this preview.</p>
+      </div>
+      <div class="rate-chips" id="rateChips"></div>
+    </section>
 
-        <div class="radio-group">
-          <span class="field-label">Include Tax?</span>
-          <button type="button" class="info-button" data-info="taxOption">?</button>
-          <label><input type="radio" name="taxEnabled" value="yes" checked /> Yes</label>
-          <label><input type="radio" name="taxEnabled" value="no" /> No</label>
+    <div class="workspace">
+      <form id="tbillForm" class="calculator" novalidate>
+        <fieldset>
+          <legend>General Information</legend>
+
+          <label class="field-label" for="faceValue">
+            Face Value (KES)
+            <button type="button" class="info-button" data-info="faceValue" aria-label="About face value">?</button>
+          </label>
+          <input id="faceValue" name="faceValue" type="number" min="50000" step="50000" inputmode="numeric" placeholder="50000" required />
+          <p class="hint">Minimum KES 50,000 for non-competitive bids, in multiples of KES 50,000. Competitive bids start at KES 2,000,000.</p>
+          <div class="chip-row" id="faceChips"></div>
+          <p class="field-error" id="faceValueError" hidden></p>
+
+          <div class="radio-group">
+            <span class="field-label" id="taxOptionLabel">
+              Include tax?
+              <button type="button" class="info-button" data-info="taxOption" aria-label="About tax">?</button>
+            </span>
+            <div class="choice-row" role="radiogroup" aria-labelledby="taxOptionLabel">
+              <label><input type="radio" name="taxEnabled" value="yes" checked /> Yes, 15% WHT</label>
+              <label><input type="radio" name="taxEnabled" value="no" /> Tax exempt</label>
+            </div>
+          </div>
+
+          <div id="taxRateRow" class="tax-row">
+            <span class="tax-text">Tax rate: <strong id="taxRateDisplay">15.00%</strong></span>
+            <button type="button" id="editTaxButton" class="secondary">Edit</button>
+          </div>
+
+          <div id="taxRateEdit" class="hidden">
+            <label class="field-label" for="taxRate">Tax rate (%)</label>
+            <input id="taxRate" type="number" min="0" max="100" step="0.01" value="15.00" />
+            <button type="button" id="saveTaxButton" class="secondary">Save</button>
+          </div>
+          <p class="hint">CBK withholds tax on the discount at settlement. Resident individuals usually pay 15% qualifying-interest WHT, which is generally final tax. Enter 0% if you have a KRA exemption certificate, or another rate if your status differs.</p>
+
+          <label class="field-label" for="interestRate">
+            Bill Rate (%)
+            <button type="button" class="info-button" data-info="interestRate" aria-label="About bill rate">?</button>
+          </label>
+          <div class="rate-row">
+            <input id="interestRate" name="interestRate" type="number" min="0" max="100" step="0.0001" placeholder="e.g. 8.7837" required />
+            <button type="button" id="usePublishedRate" class="secondary">Use last auction</button>
+          </div>
+          <p class="hint">Use the CBK published weighted average rate, or your competitive yield, with up to four decimal places. Changing tenor fills the matching published rate unless you typed a custom yield.</p>
+          <p class="field-error" id="interestRateError" hidden></p>
+
+          <label class="field-label" for="days">
+            Tenor (Days)
+            <button type="button" class="info-button" data-info="days" aria-label="About tenor">?</button>
+          </label>
+          <select id="days" name="days">
+            <option value="91">91 Days</option>
+            <option value="182">182 Days</option>
+            <option value="364">364 Days</option>
+          </select>
+          <p class="hint" id="dateHint"></p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Other Expenses</legend>
+          <p class="hint">Optional cash costs that are not part of the CBK settlement amount: bank KEPSS/RTGS fees, broker charges, or VAT on those fees. Kenya VAT is 16%.</p>
+          <div class="chip-row" id="expensePresets"></div>
+          <div id="expensesList"></div>
+          <button type="button" id="addExpenseButton" class="button-add">Add another expense</button>
+        </fieldset>
+
+        <p class="form-status" id="formError" role="alert" hidden></p>
+
+        <div class="actions">
+          <button type="submit" id="computeButton" class="primary">Compute</button>
+          <button type="button" id="resetButton" class="secondary">Reset</button>
+          <button type="button" id="copyButton" class="secondary">Copy results</button>
+          <button type="button" id="shareButton" class="secondary">Share</button>
+          <button type="button" id="printButton" class="secondary">Print</button>
+        </div>
+      </form>
+
+      <aside class="results-panel" aria-live="polite">
+        <h2>Result Summary</h2>
+        <p class="hint compact" id="resultsStatus">Enter a face value and bill rate to see pricing.</p>
+
+        <div class="metric-grid">
+          <article class="metric">
+            <p>Price per KES 100</p>
+            <p class="metric-value" id="pricePer100">—</p>
+          </article>
+          <article class="metric">
+            <p>Pay CBK today</p>
+            <p class="metric-value" id="totalPayment">—</p>
+          </article>
+          <article class="metric accent">
+            <p>Receive at maturity</p>
+            <p class="metric-value" id="maturityValue">—</p>
+          </article>
+          <article class="metric">
+            <p>Net profit after charges</p>
+            <p class="metric-value" id="netProfit">—</p>
+          </article>
         </div>
 
-        <div id="taxRateRow" class="tax-row">
-          <span class="tax-text">Tax rate: <strong id="taxRateDisplay">15.00%</strong></span>
-          <button type="button" id="editTaxButton" class="secondary">Edit</button>
-        </div>
-
-        <div id="taxRateEdit" class="hidden">
-          <label class="field-label" for="taxRate">Tax rate (%)</label>
-          <input id="taxRate" type="number" min="0" max="100" step="0.01" value="15.00" />
-          <button type="button" id="saveTaxButton" class="secondary">Save</button>
-        </div>
-
-        <label class="field-label" for="interestRate">
-          Bill Rate (%)
-          <button type="button" class="info-button" data-info="interestRate">?</button>
-        </label>
-        <input id="interestRate" name="interestRate" type="number" min="0" step="0.0001" placeholder="e.g. 12.7500" required />
-        <p class="hint">Use the CBK published bill rate with four decimal places.</p>
-
-        <label class="field-label" for="days">
-          Tenor (Days)
-          <button type="button" class="info-button" data-info="days">?</button>
-        </label>
-        <select id="days" name="days">
-          <option value="91">91 Days</option>
-          <option value="182">182 Days</option>
-          <option value="364">364 Days</option>
-        </select>
-      </fieldset>
-
-      <fieldset>
-        <legend>Other Expenses</legend>
-        <p class="hint">Add transaction fees, RTGS charges, or any extra payment cost affecting your final cash outflow.</p>
-        <div id="expensesList"></div>
-        <button type="button" id="addExpenseButton" class="button-add">Add another expense</button>
-      </fieldset>
-
-      <fieldset>
-        <legend>Result Summary</legend>
+        <div id="cashBreakdown" class="cash-breakdown"></div>
+        <div id="yieldInsight" class="yield-insight"></div>
 
         <div class="output-row">
-          <label class="field-label">Price (KES)</label>
-          <button type="button" class="info-button" data-info="price">?</button>
+          <label class="field-label">Bill price (KES) <button type="button" class="info-button" data-info="price" aria-label="About price">?</button></label>
           <output id="price" class="output-field">0.00</output>
         </div>
-
         <div class="output-row">
-          <label class="field-label">Tax Amount (KES)</label>
-          <button type="button" class="info-button" data-info="taxAmount">?</button>
+          <label class="field-label">Tax amount (KES) <button type="button" class="info-button" data-info="taxAmount" aria-label="About tax amount">?</button></label>
           <output id="taxAmount" class="output-field">0.00</output>
         </div>
-
         <div class="output-row">
-          <label class="field-label">Total Offer Payment (KES)</label>
-          <button type="button" class="info-button" data-info="totalPayment">?</button>
-          <output id="totalPayment" class="output-field">0.00</output>
+          <label class="field-label">Total offer payment (KES) <button type="button" class="info-button" data-info="totalPayment" aria-label="About total payment">?</button></label>
+          <output id="totalPaymentDetail" class="output-field">0.00</output>
         </div>
-
         <div class="output-row">
-          <label class="field-label">Total Expenditure (KES)</label>
-          <button type="button" class="info-button" data-info="totalExpenditure">?</button>
+          <label class="field-label">Extra expenses (KES)</label>
+          <output id="expensesTotal" class="output-field">0.00</output>
+        </div>
+        <div class="output-row">
+          <label class="field-label">Total expenditure (KES) <button type="button" class="info-button" data-info="totalExpenditure" aria-label="About total expenditure">?</button></label>
           <output id="totalExpenditure" class="output-field">0.00</output>
         </div>
-
         <div class="output-row">
-          <label class="field-label">Interest Amount (KES)</label>
-          <button type="button" class="info-button" data-info="netInterest">?</button>
+          <label class="field-label">Gross interest (KES) <button type="button" class="info-button" data-info="netInterest" aria-label="About interest">?</button></label>
           <output id="netInterest" class="output-field">0.00</output>
         </div>
-
         <div class="output-row">
-          <label class="field-label">Earning Before Charges (KES, %, Annualized %)</label>
-          <button type="button" class="info-button" data-info="earningBefore">?</button>
+          <label class="field-label">Earning before charges <button type="button" class="info-button" data-info="earningBefore" aria-label="About earning before charges">?</button></label>
           <output id="earningBefore" class="output-field">0.00</output>
         </div>
-
         <div class="output-row">
-          <label class="field-label">Earning After Charges (KES, %, Annualized %)</label>
-          <button type="button" class="info-button" data-info="earningAfter">?</button>
+          <label class="field-label">Earning after charges <button type="button" class="info-button" data-info="earningAfter" aria-label="About earning after charges">?</button></label>
           <output id="earningAfter" class="output-field">0.00</output>
         </div>
-      </fieldset>
 
-      <div class="actions">
-        <button type="button" id="computeButton" class="primary">Compute</button>
-        <button type="button" id="resetButton" class="secondary">Reset</button>
+        <ol class="timeline" id="timeline">
+          <li><strong>Bid</strong><span>Submit by 2:00pm Thursday on DhowCSD.</span></li>
+          <li><strong>Settlement</strong><span>Pay bill price, tax, and any bank fees.</span></li>
+          <li><strong>Maturity</strong><span>CBK credits the full face value to your linked bank account.</span></li>
+        </ol>
+      </aside>
+    </div>
+
+    <section class="panel" aria-labelledby="compareHeading">
+      <h2 id="compareHeading">Compare tenors</h2>
+      <p class="hint">Same face value, tax choice, and expenses, using last published rates unless you override them. Useful when choosing 91, 182, or 364 days.</p>
+      <div class="compare-rates">
+        <label>91-day rate (%) <input id="compare91" type="number" min="0" step="0.0001" /></label>
+        <label>182-day rate (%) <input id="compare182" type="number" min="0" step="0.0001" /></label>
+        <label>364-day rate (%) <input id="compare364" type="number" min="0" step="0.0001" /></label>
       </div>
-    </form>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Tenor</th>
+              <th>Price / 100</th>
+              <th>Pay CBK</th>
+              <th>Net after charges</th>
+              <th>Period return</th>
+              <th>Simple annualized</th>
+              <th>Compounded annual</th>
+              <th>Quoted vs net</th>
+            </tr>
+          </thead>
+          <tbody id="compareBody"></tbody>
+        </table>
+      </div>
+    </section>
 
-    <div id="popover" class="popover hidden"></div>
+    <section class="panel" aria-labelledby="yearHeading">
+      <h2 id="yearHeading">One-year reinvestment view</h2>
+      <p class="hint">If you keep the same cash out invested and can reinvest each maturity at this week’s net period return, this is the implied value after 365 days. It is an illustration, not a forecast: later auctions will have different rates, and face values must stay in KES 50,000 multiples.</p>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Tenor</th>
+              <th>Rolls per year</th>
+              <th>Cash out now</th>
+              <th>Implied value in 365 days</th>
+            </tr>
+          </thead>
+          <tbody id="yearValueBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="methodHeading">
+      <h2 id="methodHeading">How the numbers are calculated</h2>
+      <p>Treasury bills are sold at a discount. You choose the face value you will receive at maturity, then pay a lower price today. CBK publishes price per KES 100 from the quoted annual yield:</p>
+      <p class="formula">P = 100 ÷ (1 + r × d ÷ 365)</p>
+      <ul class="facts">
+        <li>r is the annual yield as a decimal (8.7837% is 0.087837).</li>
+        <li>d is 91, 182, or 364 days. The year basis is 365, matching CBK.</li>
+        <li>Bill price = P × (face value ÷ 100). P is rounded to four decimal places, matching CBK result sheets (for example 8.7674% for 91 days on 14 September 2026 priced at 97.8609).</li>
+        <li>Gross interest = face value − bill price.</li>
+        <li>Withholding tax, when included, is 15% of that discount and is added to the amount you pay CBK at settlement. You still receive full face value at maturity.</li>
+        <li>Period return uses cash actually invested (CBK payment plus extra expenses), not face value. Simple annualized return scales that by 365 ÷ days. Compounded annual return is (1 + period return)^(365 ÷ days) − 1.</li>
+        <li>The quoted yield is higher than your after-tax return because tax is paid up front on the discount.</li>
+      </ul>
+      <p class="hint compact" id="formulaCheck"></p>
+      <p class="disclaimer">This page is an independent estimator, not CBK, National Treasury, or KRA. It is not tax, legal, or investment advice. Confirm the allocated rate, amount payable, and your tax status in DhowCSD and with a qualified adviser. Tax treatment can differ for companies, non-residents, pension funds, and holders of KRA exemption certificates.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="faqHeading">
+      <h2 id="faqHeading">Investor facts</h2>
+      <dl class="faq">
+        <dt>When do I bid and pay?</dt>
+        <dd>Bids are due by 2:00pm on auction day, usually Thursday, through DhowCSD or Treasury Mobile Direct. If you are successful, pay by 2:00pm on the value date — typically the following Monday, or the next business day after a holiday.</dd>
+        <dt>Non-competitive or competitive?</dt>
+        <dd>From KES 50,000 up to just under KES 2,000,000 you bid non-competitively and take the weighted average accepted rate. From KES 2,000,000 you may also bid a yield competitively.</dd>
+        <dt>What number should match DhowCSD?</dt>
+        <dd>Match <strong>Pay CBK today</strong> (bill price plus WHT). Bank KEPSS/RTGS charges sit on top of that and are your bank’s fees, not CBK’s settlement amount.</dd>
+        <dt>Why is tax added to what I pay?</dt>
+        <dd>The bill is discounted. CBK withholds tax on that discount at settlement, so you fund price + tax now and still receive full face value at maturity.</dd>
+      </dl>
+    </section>
   </main>
 
+  <footer class="site-footer">
+    <p>Sources: <a href="https://www.centralbank.go.ke/securities/treasury-bills/" rel="noopener noreferrer" target="_blank">CBK Treasury Bills guide</a>, <a href="https://www.kra.go.ke/helping-tax-payers/faqs/withholding-income-tax" rel="noopener noreferrer" target="_blank">KRA withholding tax</a>. Last published rates used here are the 21 September 2026 issue: 8.7837%, 8.9099%, and 9.0566%.</p>
+    <p class="hint compact">Works offline after the first visit on this device. Add to your home screen from the browser menu if you want a standalone icon.</p>
+  </footer>
+
+  <div id="popover" class="popover hidden" role="tooltip" aria-hidden="true"></div>
+  <noscript><p class="noscript">Enable JavaScript to use the calculator.</p></noscript>
   <script src="script.js"></script>
 </body>
 </html>
