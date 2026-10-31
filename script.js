@@ -104,24 +104,17 @@ let lastResult = null;
 let activeInfoButton = null;
 
 const infoCopy = {
-  faceValue:
-    "Face value is the amount CBK pays you at maturity. Current CBK rule: minimum KES 50,000 for non-competitive bids, additional amounts in multiples of KES 50,000. Competitive bids start at KES 2,000,000.",
-  taxOption:
-    "Choose Yes to add withholding tax to the CBK settlement amount, matching the published CBK worked example. Choose Tax exempt if you will present a KRA tax exemption certificate. Companies and other entities may have different treatment.",
-  interestRate:
-    "Enter the published CBK weighted average bill rate, or the yield you will bid competitively, as a percent with up to four decimal places.",
+  faceValue: "Face value is the amount CBK pays you at maturity. Current CBK rule: minimum KES 50,000 for non-competitive bids, additional amounts in multiples of KES 50,000. Competitive bids start at KES 2,000,000.",
+  taxOption: "Choose Yes to add withholding tax to the CBK settlement amount, matching the published CBK worked example. Choose Tax exempt if you will present a KRA tax exemption certificate. Companies and other entities may have different treatment.",
+  interestRate: "Enter the published CBK weighted average bill rate, or the yield you will bid competitively, as a percent with up to four decimal places.",
   days: "Select 91, 182, or 364 days. That tenor is the discount period in the CBK price formula.",
   price: "The discounted amount you pay for the bill itself, before tax and bank fees. Price per 100 = 100 / (1 + yield × days / 365), rounded to four decimals to match CBK result sheets.",
-  taxAmount:
-    "Withholding tax on the discount (face value minus bill price). CBK adds this to the amount payable at settlement. You still receive full face value at maturity.",
-  totalPayment:
-    "Amount payable to CBK: bill price plus tax. This is the figure to match against DhowCSD Transactions, excluding your own bank transfer fees.",
+  taxAmount: "Withholding tax on the discount (face value minus bill price). CBK adds this to the amount payable at settlement. You still receive full face value at maturity.",
+  totalPayment: "Amount payable to CBK: bill price plus tax. This is the figure to match against DhowCSD Transactions, excluding your own bank transfer fees.",
   totalExpenditure: "Full cash outflow: CBK payment plus any extra expenses you listed.",
   netInterest: "Gross discount: face value minus bill price, before tax and expenses.",
-  earningBefore:
-    "Profit after tax but before extra expenses. Percentages use the CBK payment as the amount invested.",
-  earningAfter:
-    "Final net profit after tax and expenses. Percentages use total cash out. Simple annualized scales the holding-period return by 365/days. Compounded annual is the equivalent yearly rate if that return were repeated.",
+  earningBefore: "Profit after tax but before extra expenses. Percentages use the CBK payment as the amount invested.",
+  earningAfter: "Final net profit after tax and expenses. Percentages use total cash out. Simple annualized scales the holding-period return by 365/days. Compounded annual is the equivalent yearly rate if that return were repeated.",
 };
 
 function escapeHtml(value) {
@@ -153,6 +146,7 @@ function formatPercent(value, digits = 2) {
 }
 
 function parseNumber(input) {
+  if (!input) return NaN;
   const value = parseFloat(input.value);
   return Number.isFinite(value) ? value : NaN;
 }
@@ -222,6 +216,7 @@ function isPublishedRate(value) {
 }
 
 function showPopover(text, anchor) {
+  if (!popover) return;
   popover.innerHTML = `<p>${escapeHtml(text)}</p>`;
   popover.classList.remove("hidden");
   popover.style.position = "fixed";
@@ -245,6 +240,7 @@ function showPopover(text, anchor) {
 }
 
 function hidePopover() {
+  if (!popover) return;
   popover.classList.add("hidden");
   popover.setAttribute("aria-hidden", "true");
   if (activeInfoButton) {
@@ -254,9 +250,7 @@ function hidePopover() {
 }
 
 function setFieldError(element, message) {
-  if (!element) {
-    return;
-  }
+  if (!element) return;
   if (message) {
     element.hidden = false;
     element.textContent = message;
@@ -267,6 +261,7 @@ function setFieldError(element, message) {
 }
 
 function createExpenseRow(amount = "", description = "", vat = false) {
+  if (!expensesList) return;
   const row = document.createElement("div");
   row.className = "expense-row";
   row.dataset.index = String(expenseIndex);
@@ -315,6 +310,7 @@ function createExpenseRow(amount = "", description = "", vat = false) {
 }
 
 function readExpenses() {
+  if (!expensesList) return [];
   return Array.from(expensesList.querySelectorAll(".expense-row")).reduce((acc, row) => {
     const amount = parseFloat(row.querySelector('input[type="number"]').value) || 0;
     const description = row.querySelector('input[type="text"]').value.trim();
@@ -376,6 +372,7 @@ function calculate(faceValue, ratePercent, days, includeTax, taxRatePercent, exp
 }
 
 function validateInputs(showErrors) {
+  if (!faceValueInput || !interestRateInput || !daysSelect) return null;
   const faceValue = parseInt(faceValueInput.value, 10);
   const interestRate = parseNumber(interestRateInput);
   const errors = [];
@@ -408,6 +405,7 @@ function earningText(amount, period, annual, compound) {
 }
 
 function updateTimeline(result) {
+  if (!timeline || !dateHint) return;
   const { settlement } = auctionDates();
   const maturity = addDays(settlement, result.days);
   timeline.innerHTML = `
@@ -419,6 +417,7 @@ function updateTimeline(result) {
 }
 
 function renderCashBreakdown(result) {
+  if (!cashBreakdown) return;
   const total = result.totalExpenditure || 1;
   const segments = [
     { label: "Bill price", value: result.priceTotal, className: "is-price" },
@@ -434,25 +433,16 @@ function renderCashBreakdown(result) {
   cashBreakdown.innerHTML = `
     <p class="strip-label">Where settlement cash goes</p>
     <div class="breakdown-bar" role="img" aria-label="Cash split of total expenditure">
-      ${segments
-        .map(
-          (item) =>
-            `<span class="breakdown-seg ${item.className}" style="width:${((item.value / total) * 100).toFixed(2)}%"></span>`
-        )
-        .join("")}
+      ${segments.map((item) => `<span class="breakdown-seg ${item.className}" style="width:${((item.value / total) * 100).toFixed(2)}%"></span>`).join("")}
     </div>
     <ul class="breakdown-legend">
-      ${segments
-        .map(
-          (item) =>
-            `<li><span class="swatch ${item.className}"></span>${escapeHtml(item.label)}: KES ${formatKES(item.value)} (${formatPercent((item.value / total) * 100)})</li>`
-        )
-        .join("")}
+      ${segments.map((item) => `<li><span class="swatch ${item.className}"></span>${escapeHtml(item.label)}: KES ${formatKES(item.value)} (${formatPercent((item.value / total) * 100)})</li>`).join("")}
     </ul>
   `;
 }
 
 function renderYieldInsight(result) {
+  if (!yieldInsight) return;
   const taxDrag = result.ratePercent - result.afterAnnual;
   const quotedGap = result.ratePercent - result.afterCompound;
   yieldInsight.innerHTML = `
@@ -462,6 +452,7 @@ function renderYieldInsight(result) {
 }
 
 function renderComparison() {
+  if (!compareBody || !yearValueBody) return;
   const parsed = validateInputs(false);
   if (!parsed) {
     compareBody.innerHTML = `<tr><td colspan="8">Enter a valid face value to compare tenors.</td></tr>`;
@@ -512,6 +503,7 @@ function renderComparison() {
 }
 
 function computeResults({ silent = false } = {}) {
+  if (!form || !resultsStatus) return null;
   const parsed = validateInputs(!silent);
   if (!parsed) {
     if (!silent) {
@@ -525,14 +517,7 @@ function computeResults({ silent = false } = {}) {
   setFieldError(formError, "");
 
   const expenses = readExpenses();
-  const result = calculate(
-    parsed.faceValue,
-    parsed.interestRate,
-    parsed.days,
-    taxEnabled,
-    currentTaxRate,
-    expenses
-  );
+  const result = calculate(parsed.faceValue, parsed.interestRate, parsed.days, taxEnabled, currentTaxRate, expenses);
   lastResult = result;
 
   const bidNote =
@@ -541,28 +526,18 @@ function computeResults({ silent = false } = {}) {
       : "This size is a non-competitive bid: you take the auction average rate.";
 
   resultsStatus.textContent = `${bidNote} Quoted yield ${result.ratePercent.toFixed(4)}% for ${result.days} days.`;
-  pricePer100Output.textContent = result.pricePer100.toFixed(4);
-  totalPaymentOutput.textContent = formatKES(result.totalOfferPayment);
-  maturityValueOutput.textContent = formatKES(result.faceValue);
-  netProfitOutput.textContent = formatKES(result.earningAfter);
-  priceOutput.textContent = formatKES(result.priceTotal);
-  taxAmountOutput.textContent = formatKES(result.taxAmount);
-  totalPaymentDetail.textContent = formatKES(result.totalOfferPayment);
-  expensesTotalOutput.textContent = formatKES(result.expensesTotal);
-  totalExpenditureOutput.textContent = formatKES(result.totalExpenditure);
-  netInterestOutput.textContent = formatKES(result.grossInterest);
-  earningBeforeOutput.textContent = earningText(
-    result.earningBefore,
-    result.beforePeriod,
-    result.beforeAnnual,
-    result.beforeCompound
-  );
-  earningAfterOutput.textContent = earningText(
-    result.earningAfter,
-    result.afterPeriod,
-    result.afterAnnual,
-    result.afterCompound
-  );
+  if (pricePer100Output) pricePer100Output.textContent = result.pricePer100.toFixed(4);
+  if (totalPaymentOutput) totalPaymentOutput.textContent = formatKES(result.totalOfferPayment);
+  if (maturityValueOutput) maturityValueOutput.textContent = formatKES(result.faceValue);
+  if (netProfitOutput) netProfitOutput.textContent = formatKES(result.earningAfter);
+  if (priceOutput) priceOutput.textContent = formatKES(result.priceTotal);
+  if (taxAmountOutput) taxAmountOutput.textContent = formatKES(result.taxAmount);
+  if (totalPaymentDetail) totalPaymentDetail.textContent = formatKES(result.totalOfferPayment);
+  if (expensesTotalOutput) expensesTotalOutput.textContent = formatKES(result.expensesTotal);
+  if (totalExpenditureOutput) totalExpenditureOutput.textContent = formatKES(result.totalExpenditure);
+  if (netInterestOutput) netInterestOutput.textContent = formatKES(result.grossInterest);
+  if (earningBeforeOutput) earningBeforeOutput.textContent = earningText(result.earningBefore, result.beforePeriod, result.beforeAnnual, result.beforeCompound);
+  if (earningAfterOutput) earningAfterOutput.textContent = earningText(result.earningAfter, result.afterPeriod, result.afterAnnual, result.afterCompound);
   updateTimeline(result);
   renderCashBreakdown(result);
   renderYieldInsight(result);
@@ -573,7 +548,8 @@ function computeResults({ silent = false } = {}) {
 }
 
 function persistState() {
-  const expenses = Array.from(expensesList.querySelectorAll(".expense-row")).map((row) => ({
+  if (!faceValueInput || !interestRateInput || !daysSelect) return;
+  const expenses = Array.from((expensesList || document.createElement("div")).querySelectorAll(".expense-row")).map((row) => ({
     amount: row.querySelector('input[type="number"]').value,
     description: row.querySelector('input[type="text"]').value,
     vat: row.querySelector('input[type="checkbox"]').checked,
@@ -586,20 +562,48 @@ function persistState() {
     currentTaxRate,
     expenses,
     compare: {
-      91: compare91.value,
-      182: compare182.value,
-      364: compare364.value,
+      91: compare91 ? compare91.value : "",
+      182: compare182 ? compare182.value : "",
+      364: compare364 ? compare364.value : "",
     },
     theme: document.documentElement.getAttribute("data-theme") || "light",
   };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (error) {
+    // Ignore storage failures so the calculator still works in restricted browser modes.
+  }
+}
+
+function getStoredTheme() {
+  try {
+    const savedTheme = localStorage.getItem(STORAGE_KEY);
+    if (savedTheme) {
+      const parsed = JSON.parse(savedTheme);
+      if (parsed?.theme === "dark" || parsed?.theme === "light") {
+        return parsed.theme;
+      }
+    }
+  } catch (error) {
+    // Ignore JSON parse issues and fall back to the browser preference.
+  }
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
 function applyTheme(theme) {
-  document.documentElement.setAttribute("data-theme", theme);
-  themeToggle.textContent = theme === "dark" ? "Light" : "Dark";
-  themeToggle.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
-  const color = theme === "dark" ? "#0b1220" : "#0f4c81";
+  const normalizedTheme = theme === "dark" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", normalizedTheme);
+
+  if (themeToggle) {
+    const isDark = normalizedTheme === "dark";
+    themeToggle.textContent = isDark ? "Light mode" : "Dark mode";
+    themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+    themeToggle.setAttribute("aria-pressed", String(isDark));
+  }
+
+  const color = normalizedTheme === "dark" ? "#111827" : "#1f4d7a";
   const themeMeta = document.querySelector('meta[name="theme-color"]');
   if (themeMeta) {
     themeMeta.setAttribute("content", color);
@@ -607,6 +611,7 @@ function applyTheme(theme) {
 }
 
 function loadState() {
+  if (!faceValueInput || !interestRateInput || !daysSelect) return;
   const params = new URLSearchParams(window.location.search);
   let saved = null;
   try {
@@ -615,7 +620,7 @@ function loadState() {
     saved = null;
   }
 
-  const theme = saved?.theme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  const theme = saved?.theme || getStoredTheme();
   applyTheme(theme);
 
   daysSelect.value = params.get("d") || saved?.days || "91";
@@ -624,24 +629,27 @@ function loadState() {
   interestRateInput.value = params.get("r") || saved?.interestRate || publishedRate(tenor).toFixed(4);
   if (params.get("tax") === "0" || (saved?.taxEnabled === false && params.get("tax") == null)) {
     taxEnabled = false;
-    document.querySelector('input[name="taxEnabled"][value="no"]').checked = true;
+    const noTaxRadio = document.querySelector('input[name="taxEnabled"][value="no"]');
+    if (noTaxRadio) noTaxRadio.checked = true;
   }
   if (params.get("tax") && params.get("tax") !== "0") {
     currentTaxRate = parseFloat(params.get("tax")) || currentTaxRate;
   } else if (typeof saved?.currentTaxRate === "number") {
     currentTaxRate = saved.currentTaxRate;
   }
-  taxRateDisplay.textContent = `${currentTaxRate.toFixed(2)}%`;
-  taxRateInput.value = currentTaxRate.toFixed(2);
-  taxRateRow.style.display = taxEnabled ? "flex" : "none";
+  if (taxRateDisplay) taxRateDisplay.textContent = `${currentTaxRate.toFixed(2)}%`;
+  if (taxRateInput) taxRateInput.value = currentTaxRate.toFixed(2);
+  if (taxRateRow) taxRateRow.style.display = taxEnabled ? "flex" : "none";
 
-  compare91.value = saved?.compare?.[91] || LAST_AUCTION.rates[91];
-  compare182.value = saved?.compare?.[182] || LAST_AUCTION.rates[182];
-  compare364.value = saved?.compare?.[364] || LAST_AUCTION.rates[364];
+  if (compare91) compare91.value = saved?.compare?.[91] || LAST_AUCTION.rates[91];
+  if (compare182) compare182.value = saved?.compare?.[182] || LAST_AUCTION.rates[182];
+  if (compare364) compare364.value = saved?.compare?.[364] || LAST_AUCTION.rates[364];
 
-  expensesList.innerHTML = "";
-  const expenses = saved?.expenses?.length ? saved.expenses : [{ amount: "", description: "", vat: false }];
-  expenses.forEach((item) => createExpenseRow(item.amount, item.description, item.vat));
+  if (expensesList) {
+    expensesList.innerHTML = "";
+    const expenses = saved?.expenses?.length ? saved.expenses : [{ amount: "", description: "", vat: false }];
+    expenses.forEach((item) => createExpenseRow(item.amount, item.description, item.vat));
+  }
 }
 
 function shareUrl(result) {
@@ -655,39 +663,45 @@ function shareUrl(result) {
 }
 
 function syncQuery(result) {
+  if (!result || !window.history) return;
   const url = shareUrl(result);
   window.history.replaceState({}, "", `${window.location.pathname}?${url.split("?")[1]}`);
 }
 
 function resetForm() {
+  if (!form || !daysSelect || !interestRateInput || !taxRateInput || !taxRateDisplay || !taxRateRow || !taxRateEdit) return;
   form.reset();
   taxEnabled = true;
   currentTaxRate = 15;
-  document.querySelector('input[name="taxEnabled"][value="yes"]').checked = true;
+  const yesRadio = document.querySelector('input[name="taxEnabled"][value="yes"]');
+  if (yesRadio) yesRadio.checked = true;
   taxRateDisplay.textContent = "15.00%";
   taxRateInput.value = "15.00";
   taxRateRow.style.display = "flex";
   taxRateEdit.classList.add("hidden");
-  expensesList.innerHTML = "";
-  createExpenseRow();
+  if (expensesList) {
+    expensesList.innerHTML = "";
+    createExpenseRow();
+  }
   daysSelect.value = "91";
   interestRateInput.value = publishedRate(91).toFixed(4);
-  compare91.value = LAST_AUCTION.rates[91];
-  compare182.value = LAST_AUCTION.rates[182];
-  compare364.value = LAST_AUCTION.rates[364];
+  if (compare91) compare91.value = LAST_AUCTION.rates[91];
+  if (compare182) compare182.value = LAST_AUCTION.rates[182];
+  if (compare364) compare364.value = LAST_AUCTION.rates[364];
   lastResult = null;
-  resultsStatus.textContent = "Enter a face value and bill rate to see pricing.";
+  if (resultsStatus) resultsStatus.textContent = "Enter a face value and bill rate to see pricing.";
   ["price", "taxAmount", "totalPaymentDetail", "expensesTotal", "totalExpenditure", "netInterest"].forEach((id) => {
-    document.getElementById(id).textContent = "0.00";
+    const el = document.getElementById(id);
+    if (el) el.textContent = "0.00";
   });
-  totalPaymentOutput.textContent = "—";
-  pricePer100Output.textContent = "—";
-  maturityValueOutput.textContent = "—";
-  netProfitOutput.textContent = "—";
-  earningBeforeOutput.textContent = "0.00";
-  earningAfterOutput.textContent = "0.00";
-  cashBreakdown.innerHTML = "";
-  yieldInsight.innerHTML = "";
+  if (totalPaymentOutput) totalPaymentOutput.textContent = "—";
+  if (pricePer100Output) pricePer100Output.textContent = "—";
+  if (maturityValueOutput) maturityValueOutput.textContent = "—";
+  if (netProfitOutput) netProfitOutput.textContent = "—";
+  if (earningBeforeOutput) earningBeforeOutput.textContent = "0.00";
+  if (earningAfterOutput) earningAfterOutput.textContent = "0.00";
+  if (cashBreakdown) cashBreakdown.innerHTML = "";
+  if (yieldInsight) yieldInsight.innerHTML = "";
   setFieldError(formError, "");
   setFieldError(faceValueError, "");
   setFieldError(interestRateError, "");
@@ -723,11 +737,13 @@ function onFormChange() {
 }
 
 function applyPublishedRate(days = parseInt(daysSelect.value, 10)) {
+  if (!interestRateInput) return;
   interestRateInput.value = publishedRate(days).toFixed(4);
   onFormChange();
 }
 
 function setupChips() {
+  if (!rateAsOf || !rateChips || !faceChips || !expensePresets) return;
   rateAsOf.textContent = `Weighted average accepted rates from the ${LAST_AUCTION.asOf} issue (${LAST_AUCTION.sourceLabel}). Your allocated rate is the result of the auction you bid in, not this preview.`;
   Object.entries(LAST_AUCTION.rates).forEach(([days, rate]) => {
     const button = document.createElement("button");
@@ -735,7 +751,7 @@ function setupChips() {
     button.className = "rate-chip";
     button.textContent = `${days}d ${rate.toFixed(4)}%`;
     button.addEventListener("click", () => {
-      daysSelect.value = days;
+      if (daysSelect) daysSelect.value = days;
       applyPublishedRate(parseInt(days, 10));
     });
     rateChips.appendChild(button);
@@ -747,7 +763,7 @@ function setupChips() {
     button.className = "amount-chip";
     button.textContent = `KES ${amount.toLocaleString("en-KE")}`;
     button.addEventListener("click", () => {
-      faceValueInput.value = String(amount);
+      if (faceValueInput) faceValueInput.value = String(amount);
       onFormChange();
     });
     faceChips.appendChild(button);
@@ -759,6 +775,7 @@ function setupChips() {
     button.className = "amount-chip";
     button.textContent = `${preset.description} · ${preset.amount}`;
     button.addEventListener("click", () => {
+      if (!expensesList) return;
       const empty = Array.from(expensesList.querySelectorAll(".expense-row")).find((row) => {
         const amount = row.querySelector('input[type="number"]').value;
         const description = row.querySelector('input[type="text"]').value;
@@ -777,11 +794,13 @@ function setupChips() {
 }
 
 function setupAuctionBadge() {
+  if (!auctionBadge) return;
   const { auction, settlement } = auctionDates();
   auctionBadge.textContent = `Next Thursday auction ${formatDate(auction)} · pay by 2:00pm on ${formatDate(settlement)}`;
 }
 
 function setupFormulaCheck() {
+  if (!formulaCheck) return;
   const known = pricePerHundred(8.7674, 91);
   const ok = Math.abs(known - 97.8609) < 0.00005;
   const p91 = pricePerHundred(LAST_AUCTION.rates[91], 91);
@@ -793,10 +812,9 @@ function setupFormulaCheck() {
 }
 
 async function copyResults() {
+  if (!copyButton || !formError) return;
   const result = lastResult || computeResults({ silent: false });
-  if (!result) {
-    return;
-  }
+  if (!result) return;
   try {
     await navigator.clipboard.writeText(resultsCopy(result));
     copyButton.textContent = "Copied";
@@ -809,10 +827,9 @@ async function copyResults() {
 }
 
 async function shareResults() {
+  if (!shareButton || !formError) return;
   const result = lastResult || computeResults({ silent: false });
-  if (!result) {
-    return;
-  }
+  if (!result) return;
   const url = shareUrl(result);
   const text = resultsCopy(result);
   try {
@@ -833,101 +850,126 @@ async function shareResults() {
 }
 
 function registerServiceWorker() {
-  if (!("serviceWorker" in navigator)) {
-    return;
-  }
+  if (!("serviceWorker" in navigator)) return;
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./sw.js").catch(() => {});
   });
 }
 
-document.querySelectorAll(".info-button[data-info]").forEach((button) => {
-  button.setAttribute("aria-expanded", "false");
-  button.setAttribute("aria-controls", "popover");
-  button.addEventListener("click", (event) => {
-    event.stopPropagation();
-    if (activeInfoButton === button && !popover.classList.contains("hidden")) {
+function bindCalculatorEvents() {
+  if (!form) return;
+  document.querySelectorAll(".info-button[data-info]").forEach((button) => {
+    button.setAttribute("aria-expanded", "false");
+    button.setAttribute("aria-controls", "popover");
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      if (activeInfoButton === button && !popover.classList.contains("hidden")) {
+        hidePopover();
+        return;
+      }
+      showPopover(infoCopy[button.dataset.info], button);
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (popover && !popover.contains(event.target)) {
       hidePopover();
-      return;
     }
-    showPopover(infoCopy[button.dataset.info], button);
   });
-});
 
-document.addEventListener("click", (event) => {
-  if (!popover.contains(event.target)) {
-    hidePopover();
-  }
-});
-
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    hidePopover();
-  }
-});
-
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  computeResults({ silent: false });
-});
-
-addExpenseButton.addEventListener("click", () => {
-  createExpenseRow();
-  persistState();
-});
-resetButton.addEventListener("click", resetForm);
-printButton.addEventListener("click", () => window.print());
-copyButton.addEventListener("click", copyResults);
-shareButton.addEventListener("click", shareResults);
-usePublishedRateButton.addEventListener("click", () => applyPublishedRate());
-
-editTaxButton.addEventListener("click", () => {
-  taxRateEdit.classList.toggle("hidden");
-});
-
-saveTaxButton.addEventListener("click", () => {
-  const rateValue = parseFloat(taxRateInput.value);
-  if (Number.isNaN(rateValue) || rateValue < 0 || rateValue > 100) {
-    setFieldError(formError, "Enter a tax percentage between 0 and 100.");
-    return;
-  }
-  currentTaxRate = rateValue;
-  taxRateDisplay.textContent = `${currentTaxRate.toFixed(2)}%`;
-  taxRateEdit.classList.add("hidden");
-  onFormChange();
-});
-
-document.querySelectorAll('input[name="taxEnabled"]').forEach((radio) => {
-  radio.addEventListener("change", () => {
-    taxEnabled = radio.value === "yes";
-    taxRateRow.style.display = taxEnabled ? "flex" : "none";
-    onFormChange();
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      hidePopover();
+    }
   });
-});
 
-[faceValueInput, interestRateInput, compare91, compare182, compare364].forEach((input) => {
-  input.addEventListener("input", onFormChange);
-});
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    computeResults({ silent: false });
+  });
 
-daysSelect.addEventListener("change", () => {
-  const days = parseInt(daysSelect.value, 10);
-  const current = parseFloat(interestRateInput.value);
-  if (!interestRateInput.value || Number.isNaN(current) || isPublishedRate(current)) {
-    interestRateInput.value = publishedRate(days).toFixed(4);
+  if (addExpenseButton) {
+    addExpenseButton.addEventListener("click", () => {
+      createExpenseRow();
+      persistState();
+    });
   }
-  onFormChange();
-});
+  if (resetButton) resetButton.addEventListener("click", resetForm);
+  if (printButton) printButton.addEventListener("click", () => window.print());
+  if (copyButton) copyButton.addEventListener("click", copyResults);
+  if (shareButton) shareButton.addEventListener("click", shareResults);
+  if (usePublishedRateButton) usePublishedRateButton.addEventListener("click", () => applyPublishedRate());
 
-themeToggle.addEventListener("click", () => {
-  const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-  applyTheme(next);
-  persistState();
-});
+  if (editTaxButton) {
+    editTaxButton.addEventListener("click", () => {
+      if (taxRateEdit) taxRateEdit.classList.toggle("hidden");
+    });
+  }
 
-setupAuctionBadge();
-setupChips();
-setupFormulaCheck();
-loadState();
-computeResults({ silent: true });
-renderComparison();
-registerServiceWorker();
+  if (saveTaxButton) {
+    saveTaxButton.addEventListener("click", () => {
+      const rateValue = parseFloat(taxRateInput.value);
+      if (Number.isNaN(rateValue) || rateValue < 0 || rateValue > 100) {
+        setFieldError(formError, "Enter a tax percentage between 0 and 100.");
+        return;
+      }
+      currentTaxRate = rateValue;
+      if (taxRateDisplay) taxRateDisplay.textContent = `${currentTaxRate.toFixed(2)}%`;
+      if (taxRateEdit) taxRateEdit.classList.add("hidden");
+      onFormChange();
+    });
+  }
+
+  document.querySelectorAll('input[name="taxEnabled"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      taxEnabled = radio.value === "yes";
+      if (taxRateRow) taxRateRow.style.display = taxEnabled ? "flex" : "none";
+      onFormChange();
+    });
+  });
+
+  [faceValueInput, interestRateInput, compare91, compare182, compare364].forEach((input) => {
+    if (input) input.addEventListener("input", onFormChange);
+  });
+
+  if (daysSelect) {
+    daysSelect.addEventListener("change", () => {
+      const days = parseInt(daysSelect.value, 10);
+      const current = parseFloat(interestRateInput.value);
+      if (!interestRateInput.value || Number.isNaN(current) || isPublishedRate(current)) {
+        interestRateInput.value = publishedRate(days).toFixed(4);
+      }
+      onFormChange();
+    });
+  }
+
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      applyTheme(next);
+      try {
+        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") || {};
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...stored, theme: next }));
+      } catch (error) {
+        // Ignore storage issues so the interface remains usable.
+      }
+      persistState();
+    });
+  }
+}
+
+function initializeCalculator() {
+  if (!form) return;
+  const initialTheme = getStoredTheme();
+  applyTheme(initialTheme);
+  setupAuctionBadge();
+  setupChips();
+  setupFormulaCheck();
+  bindCalculatorEvents();
+  loadState();
+  computeResults({ silent: true });
+  renderComparison();
+  registerServiceWorker();
+}
+
+initializeCalculator();

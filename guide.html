@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>How to use the Kenya T-Bills Calculator</title>
+  <meta name="description" content="Guide to using the Kenya Treasury Bills calculator, understanding rates, taxes, settlement, and maturity." />
+  <meta name="theme-color" content="#0f4c81" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top-bar">
+    <div class="brand-wrap">
+      <div class="brand-mark">K</div>
+      <div>
+        <p class="brand">Kenya T-Bills</p>
+        <small>Investor toolkit</small>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="guide.html" class="active">How to use</a>
+      <a href="calendar.html">Auction calendar</a>
+    </nav>
+
+    <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme">Dark</button>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Calculator guide</p>
+        <h1>Use the tool with confidence</h1>
+        <p class="intro">This page explains how to interpret what the calculator shows so you can compare bids, settlement, and final return without second-guessing the numbers.</p>
+      </div>
+      <div class="hero-aside">
+        <p class="badge">Quick checklist</p>
+        <p class="hint compact">1. Pick a face value</p>
+        <p class="hint compact">2. Choose the tenor</p>
+        <p class="hint compact">3. Input the auction or bid rate</p>
+        <p class="hint compact">4. Add expenses and tax settings</p>
+      </div>
+    </section>
+
+    <div class="content-grid">
+      <section class="panel">
+        <h2>How to read the results</h2>
+        <ul class="guide-list">
+          <li><strong>Face value:</strong> This is the amount you receive at maturity. For non-competitive bids, the minimum is KES 50,000 and increments are KES 50,000. Smaller competitive bids are allowed only above KES 2,000,000.</li>
+          <li><strong>Bill price:</strong> CBK sells the bill at a discount, so you pay less than face value today. The calculator shows the discounted amount for your selected face value.</li>
+          <li><strong>Tax:</strong> WHT is charged on the discount and added to the amount due at settlement in the usual case of resident individual investors. Toggle tax off only if you have a valid exemption status.</li>
+          <li><strong>Cash out:</strong> The total cash out includes the CBK payment plus any bank fees or transfer charges you add manually. That is the number to compare to your available cash.</li>
+          <li><strong>Net profit:</strong> This is your final gain after tax and fees. It is often lower than the quoted yield because the quoted annual yield is before tax and before some execution costs.</li>
+        </ul>
+      </section>
+
+      <aside class="panel">
+        <h2>Best practices</h2>
+        <p class="page-copy">Use the published weighted average rates as a planning benchmark, but remember your final auction result can differ. If you are comparing three tenors, be sure to keep the same face value and tax assumptions to make the comparison fair.</p>
+        <div class="inline-tags">
+          <span class="tag">91 days</span>
+          <span class="tag">182 days</span>
+          <span class="tag">364 days</span>
+          <span class="tag">WHT</span>
+        </div>
+      </aside>
+    </div>
+
+    <section class="panel">
+      <h2>Typical workflow</h2>
+      <ol class="guide-list">
+        <li><strong>Plan the amount:</strong> Start with the face value you want to receive at maturity.</li>
+        <li><strong>Select your tenor:</strong> Use 91, 182, or 364 days depending on your cash-flow timing.</li>
+        <li><strong>Load the rate:</strong> Use the latest auction preview or your own competitive yield.</li>
+        <li><strong>Add costs:</strong> Include bank and broker charges if they apply and mark VAT where needed.</li>
+        <li><strong>Review final return:</strong> Check the “net profit after charges” and annualized return before you commit.</li>
+      </ol>
+    </section>
+
+    <section class="inline-panels">
+      <article class="info-box">
+        <span class="tag">Important</span>
+        <p>The published rate is a benchmark, not a guarantee. Your actual auction allocation may differ after the competitive bidding process.</p>
+      </article>
+      <article class="info-box">
+        <span class="tag">Settlement</span>
+        <p>Settlement usually falls on the next business day after the Monday following the auction. This tool reflects that rhythm to help you plan before you bid.</p>
+      </article>
+      <article class="info-box">
+        <span class="tag">Tax status</span>
+        <p>Use the tax toggle carefully. Resident individuals commonly pay final WHT on the discount, but entities and exempt investors may not pay the same rate.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="index.html">Back to calculator</a> · <a href="calendar.html">Auction calendar</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

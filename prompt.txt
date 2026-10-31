@@ -1,0 +1,277 @@
+Enhance this prompt considering all factors and facts (prompt only):
+I need you to enhance this website considering all factors and facts. Also dont need the website to have only T-bills. You can search other low risk investment and add to this website. I want it to be classified as a low risk investment guide and calculator rather than a high risk investment guide. The aim is capital preservation here.
+
+This is the website i want enhanced:
+Skip to calculator
+K
+Kenya T-Bills
+
+Investor toolkit
+Home
+How to use
+Auction calendar
+Light mode
+Treasury Bills Investment Tool
+
+Kenya Treasury Bills Pricing
+Estimate the amount payable to CBK, withholding tax, extra fees, and net earnings using the official yield formula. Built for weekly 91, 182, and 364-day auctions.
+
+Use calculator
+Read guide
+Next Thursday auction Thu, 15 Oct 2026 · pay by 2:00pm on Mon, 19 Oct 2026
+Auctions are typically Thursday. Pay successful bids by 2:00pm on the following Monday (value date), or the next business day if that Monday is a weekend or public holiday.
+
+Official results: CBK Treasury Bills · Invest via DhowCSD
+
+💸
+Cash flow clarity
+See bill price, tax, total payment, and your final net gain in one tidy view.
+
+📊
+Tenor comparison
+Compare 91, 182, and 364-day outcomes to match your liquidity and return goals.
+
+🛡️
+Fee visibility
+Track extra charges so you do not confuse bank costs with CBK-settlement figures.
+
+Last published weighted average rates
+
+Weighted average accepted rates from the 21 September 2026 issue (CBK results released 17 September 2026). Your allocated rate is the result of the auction you bid in, not this preview.
+
+91d 8.7837%
+182d 8.9099%
+364d 9.0566%
+General Information
+Face Value (KES)?
+50000
+Minimum KES 50,000 for non-competitive bids, in multiples of KES 50,000. Competitive bids start at KES 2,000,000.
+
+KES 50,000
+KES 100,000
+KES 500,000
+KES 1,000,000
+KES 2,000,000
+Include tax??
+Yes, 15% WHT
+Tax exempt
+Tax rate: 15.00%
+Edit
+CBK withholds tax on the discount at settlement. Resident individuals usually pay 15% qualifying-interest WHT, which is generally final tax. Enter 0% if you have a KRA exemption certificate, or another rate if your status differs.
+
+Bill Rate (%)?
+8.7837
+Use last auction
+Use the CBK published weighted average rate, or your competitive yield, with up to four decimal places. Changing tenor fills the matching published rate unless you typed a custom yield.
+
+Tenor (Days)?
+
+91 Days
+Other Expenses
+Optional cash costs that are not part of the CBK settlement amount: bank KEPSS/RTGS fees, broker charges, or VAT on those fees. Kenya VAT is 16%.
+
+Typical bank KEPSS/RTGS · 300
+Higher-end RTGS · 500
+Expense amount (KES)
+500
+Description
+e.g. KEPSS/RTGS charge
+Add 16% VAT
+Remove
+Add another expense
+Compute
+Reset
+Copy results
+Share
+Print
+Result Summary
+Enter a face value and bill rate to see pricing.
+
+Price per KES 100
+
+—
+
+Pay CBK today
+
+—
+
+Receive at maturity
+
+—
+
+Net profit after charges
+
+—
+
+Bill price (KES)?
+0.00
+Tax amount (KES)?
+0.00
+Total offer payment (KES)?
+0.00
+Extra expenses (KES)
+0.00
+Total expenditure (KES)?
+0.00
+Gross interest (KES)?
+0.00
+Earning before charges?
+0.00
+Earning after charges?
+0.00
+Bid
+Submit by 2:00pm Thursday on DhowCSD.
+Settlement
+Pay bill price, tax, and any bank fees.
+Maturity
+CBK credits the full face value to your linked bank account.
+Compare tenors
+Same face value, tax choice, and expenses, using last published rates unless you override them. Useful when choosing 91, 182, or 364 days.
+
+91-day rate (%)
+8.7837
+182-day rate (%)
+8.9099
+364-day rate (%)
+9.0566
+Tenor	Price / 100	Pay CBK	Net after charges	Period return	Simple annualized	Compounded annual	Quoted vs net
+Enter a valid face value to compare tenors.
+One-year reinvestment view
+If you keep the same cash out invested and can reinvest each maturity at this week’s net period return, this is the implied value after 365 days. It is an illustration, not a forecast: later auctions will have different rates, and face values must stay in KES 50,000 multiples.
+
+Tenor	Rolls per year	Cash out now	Implied value in 365 days
+Enter a valid face value to see a one-year reinvestment view.
+How the numbers are calculated
+Treasury bills are sold at a discount. You choose the face value you will receive at maturity, then pay a lower price today. CBK publishes price per KES 100 from the quoted annual yield:
+
+P = 100 ÷ (1 + r × d ÷ 365)
+
+r is the annual yield as a decimal (8.7837% is 0.087837).
+d is 91, 182, or 364 days. The year basis is 365, matching CBK.
+Bill price = P × (face value ÷ 100). P is rounded to four decimal places, matching CBK result sheets (for example 8.7674% for 91 days on 14 September 2026 priced at 97.8609).
+Gross interest = face value − bill price.
+Withholding tax, when included, is 15% of that discount and is added to the amount you pay CBK at settlement. You still receive full face value at maturity.
+Period return uses cash actually invested (CBK payment plus extra expenses), not face value. Simple annualized return scales that by 365 ÷ days. Compounded annual return is (1 + period return)^(365 ÷ days) − 1.
+The quoted yield is higher than your after-tax return because tax is paid up front on the discount.
+Formula check passed: CBK 14 Sep 2026 91-day WASR 8.7674% prices at 97.8609 per 100 (published 97.8609). Latest issue prices at 97.8570, 95.7462, 91.7164.
+
+This page is an independent estimator, not CBK, National Treasury, or KRA. It is not tax, legal, or investment advice. Confirm the allocated rate, amount payable, and your tax status in DhowCSD and with a qualified adviser. Tax treatment can differ for companies, non-residents, pension funds, and holders of KRA exemption certificates.
+
+Investor facts
+When do I bid and pay?
+Bids are due by 2:00pm on auction day, usually Thursday, through DhowCSD or Treasury Mobile Direct. If you are successful, pay by 2:00pm on the value date — typically the following Monday, or the next business day after a holiday.
+Non-competitive or competitive?
+From KES 50,000 up to just under KES 2,000,000 you bid non-competitively and take the weighted average accepted rate. From KES 2,000,000 you may also bid a yield competitively.
+What number should match DhowCSD?
+Match Pay CBK today (bill price plus WHT). Bank KEPSS/RTGS charges sit on top of that and are your bank’s fees, not CBK’s settlement amount.
+Why is tax added to what I pay?
+The bill is discounted. CBK withholds tax on that discount at settlement, so you fund price + tax now and still receive full face value at maturity.
+Sources: CBK Treasury Bills guide, KRA withholding tax. Last published rates used here are the 21 September 2026 issue: 8.7837%, 8.9099%, and 9.0566%.
+
+Works offline after the first visit on this device. Add to your home screen from the browser menu if you want a standalone icon.
+
+
+
+K
+Kenya T-Bills
+
+Investor toolkit
+Home
+How to use
+Auction calendar
+Dark
+Calculator guide
+
+Use the tool with confidence
+This page explains how to interpret what the calculator shows so you can compare bids, settlement, and final return without second-guessing the numbers.
+
+Quick checklist
+1. Pick a face value
+
+2. Choose the tenor
+
+3. Input the auction or bid rate
+
+4. Add expenses and tax settings
+
+How to read the results
+Face value: This is the amount you receive at maturity. For non-competitive bids, the minimum is KES 50,000 and increments are KES 50,000. Smaller competitive bids are allowed only above KES 2,000,000.
+Bill price: CBK sells the bill at a discount, so you pay less than face value today. The calculator shows the discounted amount for your selected face value.
+Tax: WHT is charged on the discount and added to the amount due at settlement in the usual case of resident individual investors. Toggle tax off only if you have a valid exemption status.
+Cash out: The total cash out includes the CBK payment plus any bank fees or transfer charges you add manually. That is the number to compare to your available cash.
+Net profit: This is your final gain after tax and fees. It is often lower than the quoted yield because the quoted annual yield is before tax and before some execution costs.
+Best practices
+Use the published weighted average rates as a planning benchmark, but remember your final auction result can differ. If you are comparing three tenors, be sure to keep the same face value and tax assumptions to make the comparison fair.
+
+91 days
+182 days
+364 days
+WHT
+Typical workflow
+Plan the amount: Start with the face value you want to receive at maturity.
+Select your tenor: Use 91, 182, or 364 days depending on your cash-flow timing.
+Load the rate: Use the latest auction preview or your own competitive yield.
+Add costs: Include bank and broker charges if they apply and mark VAT where needed.
+Review final return: Check the “net profit after charges” and annualized return before you commit.
+Important
+The published rate is a benchmark, not a guarantee. Your actual auction allocation may differ after the competitive bidding process.
+
+Settlement
+Settlement usually falls on the next business day after the Monday following the auction. This tool reflects that rhythm to help you plan before you bid.
+
+Tax status
+Use the tax toggle carefully. Resident individuals commonly pay final WHT on the discount, but entities and exempt investors may not pay the same rate.
+
+Back to calculator · Auction calendar
+
+K
+Kenya T-Bills
+
+Investor toolkit
+Home
+How to use
+Auction calendar
+Dark
+Calculator guide
+
+Use the tool with confidence
+This page explains how to interpret what the calculator shows so you can compare bids, settlement, and final return without second-guessing the numbers.
+
+Quick checklist
+1. Pick a face value
+
+2. Choose the tenor
+
+3. Input the auction or bid rate
+
+4. Add expenses and tax settings
+
+How to read the results
+Face value: This is the amount you receive at maturity. For non-competitive bids, the minimum is KES 50,000 and increments are KES 50,000. Smaller competitive bids are allowed only above KES 2,000,000.
+Bill price: CBK sells the bill at a discount, so you pay less than face value today. The calculator shows the discounted amount for your selected face value.
+Tax: WHT is charged on the discount and added to the amount due at settlement in the usual case of resident individual investors. Toggle tax off only if you have a valid exemption status.
+Cash out: The total cash out includes the CBK payment plus any bank fees or transfer charges you add manually. That is the number to compare to your available cash.
+Net profit: This is your final gain after tax and fees. It is often lower than the quoted yield because the quoted annual yield is before tax and before some execution costs.
+Best practices
+Use the published weighted average rates as a planning benchmark, but remember your final auction result can differ. If you are comparing three tenors, be sure to keep the same face value and tax assumptions to make the comparison fair.
+
+91 days
+182 days
+364 days
+WHT
+Typical workflow
+Plan the amount: Start with the face value you want to receive at maturity.
+Select your tenor: Use 91, 182, or 364 days depending on your cash-flow timing.
+Load the rate: Use the latest auction preview or your own competitive yield.
+Add costs: Include bank and broker charges if they apply and mark VAT where needed.
+Review final return: Check the “net profit after charges” and annualized return before you commit.
+Important
+The published rate is a benchmark, not a guarantee. Your actual auction allocation may differ after the competitive bidding process.
+
+Settlement
+Settlement usually falls on the next business day after the Monday following the auction. This tool reflects that rhythm to help you plan before you bid.
+
+Tax status
+Use the tax toggle carefully. Resident individuals commonly pay final WHT on the discount, but entities and exempt investors may not pay the same rate.
+
+Back to calculator · Auction calendar

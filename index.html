@@ -21,22 +21,58 @@
   <a class="skip-link" href="#tbillForm">Skip to calculator</a>
 
   <header class="top-bar">
-    <p class="brand">Kenya T-Bills</p>
+    <div class="brand-wrap">
+      <div class="brand-mark">K</div>
+      <div>
+        <p class="brand">Kenya T-Bills</p>
+        <small>Investor toolkit</small>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="index.html" class="active">Home</a>
+      <a href="guide.html">How to use</a>
+      <a href="calendar.html">Auction calendar</a>
+    </nav>
+
     <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme">Dark</button>
   </header>
 
   <main class="page-shell">
     <section class="hero">
-      <div>
+      <div class="hero-copy">
         <p class="eyebrow">Treasury Bills Investment Tool</p>
         <h1>Kenya Treasury Bills Pricing</h1>
         <p class="intro">Estimate the amount payable to CBK, withholding tax, extra fees, and net earnings using the official yield formula. Built for weekly 91, 182, and 364-day auctions.</p>
+        <div class="hero-actions">
+          <a href="#tbillForm" class="primary button-link">Use calculator</a>
+          <a href="guide.html" class="secondary button-link light-link">Read guide</a>
+        </div>
       </div>
+
       <div class="hero-aside">
         <p class="badge" id="auctionBadge">Loading auction dates…</p>
         <p class="hint compact">Auctions are typically Thursday. Pay successful bids by 2:00pm on the following Monday (value date), or the next business day if that Monday is a weekend or public holiday.</p>
         <p class="hint compact">Official results: <a href="https://www.centralbank.go.ke/bills-bonds/treasury-bills/" rel="noopener noreferrer" target="_blank">CBK Treasury Bills</a> · Invest via <a href="https://dhowcsd.centralbank.go.ke/" rel="noopener noreferrer" target="_blank">DhowCSD</a></p>
       </div>
+    </section>
+
+    <section class="feature-grid" aria-label="Key features">
+      <article class="feature-card">
+        <span class="feature-icon">💸</span>
+        <h3>Cash flow clarity</h3>
+        <p>See bill price, tax, total payment, and your final net gain in one tidy view.</p>
+      </article>
+      <article class="feature-card">
+        <span class="feature-icon">📊</span>
+        <h3>Tenor comparison</h3>
+        <p>Compare 91, 182, and 364-day outcomes to match your liquidity and return goals.</p>
+      </article>
+      <article class="feature-card">
+        <span class="feature-icon">🛡️</span>
+        <h3>Fee visibility</h3>
+        <p>Track extra charges so you do not confuse bank costs with CBK-settlement figures.</p>
+      </article>
     </section>
 
     <section class="rate-strip" aria-label="Latest published average rates">

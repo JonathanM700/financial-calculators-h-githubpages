@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Kenya T-Bills Auction Calendar</title>
+  <meta name="description" content="Plan Kenya Treasury Bill auction dates, settlement timing, and value-date windows for 91, 182, and 364 day bills." />
+  <meta name="theme-color" content="#0f4c81" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top-bar">
+    <div class="brand-wrap">
+      <div class="brand-mark">K</div>
+      <div>
+        <p class="brand">Kenya T-Bills</p>
+        <small>Investor toolkit</small>
+      </div>
+    </div>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="guide.html">How to use</a>
+      <a href="calendar.html" class="active">Auction calendar</a>
+    </nav>
+
+    <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme">Dark</button>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Auction timing</p>
+        <h1>Plan your next Treasury Bill bid</h1>
+        <p class="intro">The Kenya Treasury Bill timetable is usually regular, but settlement still skips weekends and public holidays. Use this page as a quick planning view before you execute a bid.</p>
+      </div>
+      <div class="hero-aside">
+        <p class="badge">Typical cycle</p>
+        <p class="hint compact">Auction day: Thursday</p>
+        <p class="hint compact">Value date: Monday or next business day</p>
+        <p class="hint compact">Maturity: 91, 182, or 364 days later</p>
+      </div>
+    </section>
+
+    <section class="feature-grid">
+      <article class="feature-card">
+        <span class="feature-icon">📅</span>
+        <h3>Bid window</h3>
+        <p>Most auctions occur on a Thursday, with bids settled in the usual CBK window. It is worth confirming the exact timetable when you are ready to place your submission.</p>
+      </article>
+      <article class="feature-card">
+        <span class="feature-icon">💳</span>
+        <h3>Settlement</h3>
+        <p>Successful bids are typically paid by 2:00pm on the value date, not on the auction date itself. The calculator reflects this timing and the business-day adjustment rule.</p>
+      </article>
+      <article class="feature-card">
+        <span class="feature-icon">🔁</span>
+        <h3>Tenor planning</h3>
+        <p>Longer tenors often offer a higher quoted yield, but shorter tenors improve liquidity. Use the main calculator to compare net return after fees and tax.</p>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>What to watch before bidding</h2>
+      <ul class="guide-list">
+        <li><strong>Market direction:</strong> If you think rates are likely to fall, shorter tenors may protect flexibility. If you expect rates to rise, a longer tenor may lock in a higher yield.</li>
+        <li><strong>Cash readiness:</strong> Make sure enough funds are available for settlement on the value date, including tax and any bank fees.</li>
+        <li><strong>Tax treatment:</strong> Know whether your structure is exempt or taxable. The calculator can model both with a quick toggle.</li>
+        <li><strong>Maturity date:</strong> Match the maturity to your expected cash need. A 91-day bill may be more useful for operational liquidity, while a 364-day bill is better for a longer cash lock.</li>
+      </ul>
+    </section>
+
+    <section class="inline-panels">
+      <article class="info-box">
+        <span class="tag">Example</span>
+        <p>If the auction is on Thursday, the value date is often the following Monday. If that Monday is a holiday, the settlement moves to the next business day.</p>
+      </article>
+      <article class="info-box">
+        <span class="tag">Decision help</span>
+        <p>Use the calculator on the home page to compare cash out, return, and implied annualized yield before making the allocation decision.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p><a href="index.html">Back to calculator</a> · <a href="guide.html">How to use</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
